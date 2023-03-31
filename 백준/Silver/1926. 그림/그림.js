@@ -1,53 +1,56 @@
-const fs = require("fs");
-const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
+const fs = require('fs');
+
+const filePath =
+	process.platform === 'linux' ? '/dev/stdin' : 'BOJ/1926/input.txt';
 let input = fs
-    .readFileSync(filePath)
-    .toString()
-    .trim()
-    .split("\n")
-    .map((item) => item.split(" ").map((value) => +value));
+	.readFileSync(filePath)
+	.toString()
+	.trim()
+	.split('\n')
+	.map(item => item.split(' ').map(value => +value));
 
-const [n, m] = input.shift();
-const visited = Array.from({ length: n }, () =>
-    Array.from({ length: m }, () => false)
-);
-let direction = [
-    [1, 0],
-    [-1, 0],
-    [0, 1],
-    [0, -1],
-];
-let answer = 0; // 그림의 갯수
-let result = [];
-const BFS = (start) => {
-    let queue = [start];
-    let total = 0; // 그림의 넓이 카운트
-    while (queue.length) {
-        let [y, x] = queue.shift();
-        if (visited[y][x]) continue;
-        visited[y][x] = true;
-        total++;
-        for (let i = 0; i < direction.length; i++) {
-            let [dy, dx] = [y + direction[i][0], x + direction[i][1]];
-            if (dy < 0 || dx < 0 || dy >= n || dx >= m) continue;
-            if (visited[dy][dx]) continue;
-            if (input[dy][dx] === 1) { // 상하좌우 인접한곳에 그림이 연결되있으면
-                queue.push([dy, dx]);
-            }
-        }
-    }
-    if (total) { // 그림의 넓이가 계산되어 있다면
-        answer++; // 그림의 갯수 +1
-        result.push(total); // result에 그림의 넓이 push
-    }
-};
+const mapY = +input[0][0];
+const mapX = +input[0][1];
 
-for (let i = 0; i < n; i++) {
-    for (let j = 0; j < m; j++) {
-        if (input[i][j] === 1 && !visited[i][j]) { // 그림이 있는곳이고 방문한적이 없다면 BFS 실행
-            BFS([i, j]);
-        }
-    }
+
+const paper = input.slice(1);
+const chk = Array.from(Array(mapY), () => Array(mapX).fill(false));
+
+const dirY = [0, 1, 0, -1];
+const dirX = [1, 0, -1, 0];
+
+function bfs(y, x) {
+	let rs = 1;
+	const q = [[y, x]];
+
+	while (q.length > 0) {
+		const [originY, originX] = q.pop();
+
+		for (let range = 0; range < 4; range++) {
+			const newY = originY + dirY[range];
+			const newX = originX + dirX[range];
+			if (0 <= newY && newY < mapY && 0 <= newX && newX < mapX) {
+				if (paper[newY][newX] === 1 && !chk[newY][newX]) {
+					rs++;
+					chk[newY][newX] = true;
+					q.push([newY, newX]);
+				}
+			}
+		}
+	}
+	return rs;
 }
-if (!answer) return console.log(0 + "\n" + 0); // 그림의 갯수가 없으면 0 출력
-console.log(answer + "\n" + Math.max(...result)); // 그림의 갯수와 넓이가 담긴 배열에서 제일 큰 값을 출력한다
+
+let count = 0;
+let maxVal = 0;
+for (let paperY = 0; paperY < mapY; paperY++) {
+	for (let paperX = 0; paperX < mapX; paperX++) {
+		if (paper[paperY][paperX] === 1 && !chk[paperY][paperX]) {
+			chk[paperY][paperX] = true;
+			count++;
+			maxVal = Math.max(maxVal, bfs(paperY, paperX));
+		}
+	}
+}
+
+console.log(count + '\n' + maxVal);
