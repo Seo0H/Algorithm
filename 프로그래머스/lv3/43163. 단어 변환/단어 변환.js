@@ -1,9 +1,8 @@
 function solution(begin, target, words) {
-
     if(!words.includes(target)) return 0;
     
     const wordsCount = words.length;
-    const wordLength = words[0].length;
+    const wordLength = begin.length;
     const q = [[begin,0]];
     
     while(q.length > 0){
@@ -17,6 +16,6 @@ function solution(begin, target, words) {
                 q.push([words[y], count+1]);
                 words[y] = '';
             };
-        }
-    }
+        };
+    };
 }
