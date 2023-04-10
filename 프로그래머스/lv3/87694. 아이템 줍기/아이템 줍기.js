@@ -47,7 +47,6 @@ function solution(rectangle, characterX, characterY, itemX, itemY) {
         while(q.length > 0){
             const [qy, qx, cnt] = q.shift();
             if(qy === itemY*2 && qx === itemX*2) {
-                console.log(qy, qx)
                 return cnt
             };
             
