@@ -9,14 +9,15 @@ function solution(rectangle, characterX, characterY, itemX, itemY) {
     },[])
     
     // 2배로 키운 사각형을 기준으로 map 그리기
-    // const [mapY, mapX] = douobleReacts.reduce((acc,cur)=>{
-    //     const [_, __, maxX, maxY] = cur;
-    //     const [accY, accX] = acc;
-    //     if(accY < maxY) acc[0] = maxY;
-    //     if(accX < maxX) acc[1] = maxX;
-    //     return acc;
-    // },[0,0])
-    const map = Array.from({length: 103}, () => Array.from({length: 103}, _ => 0));
+    const [mapY, mapX] = douobleReacts.reduce((acc,cur)=>{
+        const [_, __, maxX, maxY] = cur;
+        const [accY, accX] = acc;
+        if(accY < maxY) acc[0] = maxY;
+        if(accX < maxX) acc[1] = maxX;
+        return acc;
+    },[0,0])
+    
+    const map = Array.from({length: mapY+1}, () => Array.from({length: mapX+1}, _ => 0));
     
     // 두배로 키운 사각형의 외각선을 map에 표기하기
     douobleReacts.forEach(e => {
