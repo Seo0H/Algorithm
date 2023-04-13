@@ -1,10 +1,11 @@
+// 0413
 function solution(participant, completion) {
-    const isCompletedHash = completion.reduce((acc,cur) => {
-        acc[cur] >= 1 ? acc[cur]++ : acc[cur] = 1;
-        return acc;
-    }, {});
+    const completerMemo = completion.reduce((memo, cur) =>{
+        memo[cur] ? memo[cur]++ : memo[cur] = 1;
+        return memo
+    },{})
     for(let i=0; i<participant.length; i++){
-        if(!isCompletedHash[participant[i]] || isCompletedHash[participant[i]] === 0) return participant[i];
-        isCompletedHash[participant[i]]--;
+        if(!completerMemo[participant[i]]) return participant[i];
+        completerMemo[participant[i]]--;
     }
 }
