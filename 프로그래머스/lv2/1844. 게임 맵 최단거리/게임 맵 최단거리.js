@@ -1,23 +1,20 @@
 function solution(maps) {
     const q = [[0,0,1]];
-    const dir = [[1,0], [-1,0], [0,1], [0,-1]];
-    maps[0][0] = -1;
-        
-    while(q.length > 0){
-        const [qy, qx, count] = q.shift();
-        if(qy === maps.length-1 && qx === maps[0].length - 1) return count;
-        for(const d of dir){
+    const dir = [[0,1],[0,-1],[1,0],[-1,0]];
+    
+    while(q.length){
+        const [qy, qx, cnt] = q.shift();
+        for(let d of dir){
             const [dy, dx] = d;
-            const ny = dy + qy;
-            const nx = dx + qx;
-            if(maps[ny] && maps[ny][nx] && maps[ny][nx] === 1){
-                maps[ny][nx] = -1;
-                q.push([ny,nx, count+1]);
+            const y = dy + qy;
+            const x = dx + qx;
+            if(y === maps.length-1 && x === maps[0].length-1) return cnt+1;
+            if(maps[y] && maps[y][x]===1){
+                maps[y][x] = -1;
+                q.push([y,x,cnt+1]);
             }
+            
         }
     }
-    
     return -1;
 }
-
-
