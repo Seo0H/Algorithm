@@ -89,7 +89,5 @@ face에 해당하는 의상이 crow_mask, blue_sunglasses, smoky_makeup이므로
 2. blue_sunglasses
 3. smoky_makeup
 </code></pre></div>
-<p><a href="http://2013.bapc.eu/" target="_blank" rel="noopener">출처</a></p>
-
 
 > 출처: 프로그래머스 코딩 테스트 연습, https://programmers.co.kr/learn/challenges
