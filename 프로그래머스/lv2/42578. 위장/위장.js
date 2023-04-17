@@ -1,6 +1,6 @@
 function solution(clothes) {    
-    return Object.values(clothes.reduce((acc,cur) => {
-        acc[cur[1]] ? acc[cur[1]]++ : acc[cur[1]] = 1;
-        return acc;
-    },{})).reduce((a,b)=> a*(b+1), 1)-1;  
+    return Object.values(clothes.reduce((acc,[_,kind]) => {
+        acc[kind] ? acc[kind]++ : acc[kind]=1;
+        return acc
+    },{})).reduce((acc,cur) => acc*(cur+1),1)-1;
 }
