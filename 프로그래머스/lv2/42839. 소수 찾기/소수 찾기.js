@@ -1,28 +1,25 @@
 function solution(numbers) {
-	let nums = numbers.split("");
-	let set = new Set();
-	dfs(set, nums, '');
-	return set.size;
+    const set = new Set();
+    dfs(set, numbers.split(""), '');
+    return set.size;
 }
 
-
-
-function dfs(set, arr, fixed) {
-	if (arr.length >= 1) {
-		for (let i = 0; i < arr.length; i++) {
-			let newFixed = fixed + arr[i];
-			let copyArr = [...arr];
+function dfs(set, nums, strNum){
+    if(nums.length >= 1){
+        for(let i=0; i< nums.length; i++){
+            const thisNum = strNum+nums[i];
+            let copyArr = [...nums];
 			copyArr.splice(i, 1);
-			if (isPrime(parseInt(newFixed))) set.add(parseInt(newFixed));
-			dfs(set, copyArr, newFixed);
-		}
-	}
+            if(isPrime(+thisNum)) set.add(+thisNum);
+            dfs(set, copyArr, thisNum);
+        }
+    }
 }
 
-function isPrime(n) {
-	if (n < 2) return false;
-	for (let i = 2; i <= Math.sqrt(n); i++) {
-		if (n % i === 0) return false;
+function isPrime(num){
+    if (num < 2) return false;
+	for (let i = 2; i*i <= num; i++) {
+		if (num % i === 0) return false;
 	}
 	return true;
 }
