@@ -1,16 +1,15 @@
+// 0419 5번째 풀이
 function solution(numbers, target) {
     var answer = 0;
-    dfs(0,0);
+    bfs(0,0);
     return answer;
     
-    function dfs(idx,sum){
-        if(idx === numbers.length){
-            if(sum === target) answer++;
+    function bfs(sum, idx){
+        if(idx >= numbers.length){
+            if(sum === target) answer++
             return;
         }
-        
-        dfs(idx+1,sum + numbers[idx]);
-        dfs(idx+1,sum - numbers[idx]);
-    }    
+        bfs(sum+numbers[idx], idx+1);
+        bfs(sum-numbers[idx], idx+1);
+    }
 }
-
