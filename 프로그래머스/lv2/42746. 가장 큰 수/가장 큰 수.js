@@ -1,4 +1,4 @@
 function solution(numbers) {
-    numbers.sort((a,b) => (b+''+a)-(a+''+b))
-    return !numbers[0] ? '0' : numbers.join().replaceAll(',','');
+    const answer = numbers.sort((a,b)=> (b+''+a) - (a+''+b)).join().replaceAll(',','');
+    return answer[0] ==='0' ? '0' : answer;
 }
