@@ -1,24 +1,21 @@
 function solution(genres, plays) {
-    const genresCount = genres.reduce((memo, cur, idx) => {
-        memo[cur] ? memo[cur] += plays[idx] : memo[cur] = plays[idx];
-        return memo;
-    },{})
-
-    var dupDic = {};    
-    return genres.map((t,i)=> ({genre : t, count:plays[i] , index:i}))
-        .sort((a,b)=>{
-        // 장르가 다르고 재생횟수가 큰 경우 내림차순 정렬
-        if(a.genre !== b.genre) return genresCount[b.genre] - genresCount[a.genre];
-        // 장르가 같고 재생횟수가 큰 경우 내림차순 정렬
-        if(a.count !== b.count) return b.count - a.count;
-        // 장르가 같고 재생횟수가 같은 경우 인덱스를 기준으로 오름차순 정렬
-               return a.index - b.index;
-           })
-        .filter(t =>  {
-        // 상위 2개만 카운트
-        if(dupDic[t.genre] >= 2) return false;
-        dupDic[t.genre] = dupDic[t.genre] ? dupDic[t.genre]+ 1 : 1;
-        return true;
-            })
-        .map(t=> t.index); 
+    const genresPlayHash = genres.reduce((acc,cur,idx) => {
+        acc[cur] ? acc[cur] += plays[idx] : acc[cur] = plays[idx];
+        return acc;
+    },{});
+    const isAddedTwice = {};
+    return genres.map((genres,idx) => { return { genre : genres, idx, play: plays[idx]}})
+                      .sort((a,b) => {
+                          // 장르 판별
+                          if(a.genre !== b.genre) return genresPlayHash[b.genre] - genresPlayHash[a.genre];
+                          // 재생 노래 횟수 판별
+                          if(a.play !== b.play) return b.play - a.play;
+                          // 고유 번호 판별
+                          return a.idx - b.idx;
+                      })
+                     .filter(({genre, idx}) => {
+                         isAddedTwice[genre] ? isAddedTwice[genre]++ : isAddedTwice[genre] = 1;
+                         if(isAddedTwice[genre] > 2) return false;
+                         return true;
+                     }).map(({idx}) => idx);;
 }
