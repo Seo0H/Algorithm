@@ -1,0 +1,30 @@
+{
+  "name": "algorithm",
+  "version": "1.0.0",
+  "description": "언어: JavaScript\r 코딩테스트 문풀 레포지토리",
+  "main": "index.js",
+  "scripts": {
+    "test": "karma start",
+    "dev": "webpack-dev-server --inline --hot",
+    "build": "webpack -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Seo0H/Algorithm.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Seo0H/Algorithm/issues"
+  },
+  "homepage": "https://github.com/Seo0H/Algorithm#readme",
+  "devDependencies": {
+    "@types/jasmine": "^4.3.1",
+    "jasmine-core": "^4.6.0",
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.0.4",
+    "webpack": "^5.80.0",
+    "webpack-dev-server": "^4.13.3"
+  }
+}
