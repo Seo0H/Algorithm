@@ -1,13 +1,10 @@
 function solution(name, yearning, photos) {
-    var answer = [];
-    photos.forEach((photo) => {
-        answer.push(photo.reduce((sumYearning,thisName,idx)=> {
-            const hasThisNameIdx = name.indexOf(thisName);
-            if(hasThisNameIdx >= 0) sumYearning += yearning[hasThisNameIdx];
+    return photos.map((photo) => photo.reduce((sumYearning,thisName,idx)=> {
+            const NameIdx = name.indexOf(thisName);
+            const hasName = NameIdx >= 0;
+            if(hasName) sumYearning += yearning[NameIdx];
             return sumYearning;
-        },0))
-    })
-    return answer;
+        },0));
 }
 
 // name과 yarning의 idx는 일치한다.
