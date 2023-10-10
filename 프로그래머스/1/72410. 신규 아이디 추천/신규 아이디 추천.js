@@ -14,5 +14,5 @@ function solution(new_id) {
         .slice(0,15)
         .replaceAll(selectFirstLastDot,'');
     
-    return answer.length <= 2 ? answer + answer.at(-1).repeat(3 - answer.length) : answer
+    return answer.padEnd(3, answer.at(-1));
 }
