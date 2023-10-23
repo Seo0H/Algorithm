@@ -1,10 +1,7 @@
 function solution(phoneBook) {
-    phoneBook.sort();
-    
-    const isPrefix = phoneBook.some((number,idx)=>{
-        return phoneBook[idx+1]?.indexOf(number) === 0
-    })
-    
-    return !isPrefix;
-}
+    return !phoneBook.sort().some((t,i)=> {
+        if(i === phoneBook.length -1) return false;
 
+        return phoneBook[i+1].startsWith(phoneBook[i]);        
+    })
+}
