@@ -5,7 +5,7 @@ function solution(tickets) {
     dfs(['ICN'], visited);
     return answer[0];
     
-    function dfs(arr, visited){
+    function dfs(arr){
         if(arr.length >= tickets.length + 1){
             answer.push(arr)
         }
