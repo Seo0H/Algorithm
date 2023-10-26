@@ -1,6 +1,6 @@
 function solution(tickets) {
     let answer = []
-    tickets.sort((a,b) => b[1] < a[1] ? 1 : -1);
+    tickets.sort();
     const visited = Array.from({ length:tickets.length }, () => false);
     dfs(['ICN'], visited);
     return answer[0];
