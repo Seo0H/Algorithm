@@ -1,11 +1,5 @@
 function solution(n, k) {
-    let answer = 0;
-    const num = n.toString(k);
-    num.split('0').forEach((cur) => {
-        if(isPrime(Number(cur))) answer++;
-    })
-    
-    return answer;
+    return n.toString(k).split('0').filter((cur) => isPrime(Number(cur))).length;;
 }
 
 function isPrime(num){
