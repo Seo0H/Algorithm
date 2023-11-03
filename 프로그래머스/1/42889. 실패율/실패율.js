@@ -1,12 +1,14 @@
 function solution(N, stages) {
+    let sum = 0;
     
     const a = stages.reduce((acc,cur) => {
         acc[cur-1] ? acc[cur-1]++ : acc[cur-1] = 1; 
+        sum++;
         return acc;
     }, Array.from({length:N+1}, ()=>0));
     
     
-    let sum = stages.length;
+    
     
     const b = a.reduce((acc,cur,idx) => {
         acc[idx][0] = cur/sum;
