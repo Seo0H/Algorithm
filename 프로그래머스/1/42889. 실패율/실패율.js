@@ -5,7 +5,8 @@ function solution(N, stages) {
         return acc;
     }, Array.from({length:N+1}, ()=>0));
     
-    let sum = a.reduce((acc,cur) => acc+cur, 0);
+    
+    let sum = stages.length;
     
     const b = a.reduce((acc,cur,idx) => {
         acc[idx][0] = cur/sum;
