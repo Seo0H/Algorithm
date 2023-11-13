@@ -1,10 +1,5 @@
 function solution(nums) {
-    
-    const countPocketmon = Object.keys(nums.reduce((acc,cur)=> {
-        acc[cur] ? acc[cur] = 1: acc[cur]++;
-        return acc }, {})).length;
-    
-        
+    const countPocketmon = new Set(nums).size;
     return nums.length/2 < countPocketmon ? Math.floor(nums.length/2) : countPocketmon;
 }
 
