@@ -1,53 +1,46 @@
 function solution(cap, n, deliveries, pickups) {
-    // i : 배달해야 하는 가장 먼 곳
-    // j : 수거해야 하는 가장 먼 곳
-    let [i, j] = [n-1, n-1];
-    
-    while (i >= 0 && deliveries[i] === 0) {
-        i--;
-    }
-    
-    while(j >= 0 && pickups[j] === 0){
-        j--
-    }
-    
+    // i 배달해야 하는 가장 먼 집, j 픽업해야 하는 가장 먼집
+    let [i,j] = [n-1, n-1];
     let answer = 0;
     
-    while (i >= 0 || j >= 0){
-        answer += (Math.max(i,j) + 1) * 2 // 물류 창고 까지 돌아가야 하기 때문에 x2
+    while(i >= 0 && deliveries[i] === 0) i -= 1 ;
+    while(j >= 0 && pickups[j] === 0) j -= 1 ;
     
-        // 배달
-        let cur = cap;
+    // 배달
+    while(i >= 0 || j >= 0){
+        // 일단 한번 왔다갔다 할 때 둘 중 더 먼 곳을 가야 함.
+        // 물류창고로 돌아와야 하기 때문에 *2
+        answer += (Math.max(i,j) + 1) * 2; 
         
-        while (i >= 0 && cur > 0) {
-            if(deliveries[i] > cur) { // 배달해야하는 집의 용량이 현재 담고 있는 용량보다 큰 경우
-                deliveries[i] -= cur; // 한번에 다 처리를 못하기에, 다시 갔다 와야함.
-                cur = 0;
-            } else { 
-                // 배달해야하는 집의 용량이 현재 담고 있는 용량보다 작은 경우
-                cur -= deliveries[i] 
+        let curCap = cap;
+        
+        while(curCap > 0 && i >= 0){
+            if(deliveries[i] > curCap){
+                deliveries[i] -= curCap;
+                curCap = 0;
+            } else {
+                curCap -= deliveries[i];
                 deliveries[i] = 0;
-                
-                while ( i >= 0 && deliveries[i] === 0){
-                    i-=1;
+
+                while(i >= 0 && deliveries[i] === 0){
+                    i -=1;
                 }
             }
         }
         
         // 수거
-        cur = cap;
+        curCap = cap;
         
-        while (j >= 0 && cur > 0) {
-            if(pickups[j] > cur) { // 수거해야 하는 집의 용량이 수용가능한 용량보다 큰 경우
-                pickups[j] -= cur; // 한번에 다 처리를 못하기에, 다시 갔다 와야함.
-                cur = 0;
-            }else { 
-                // 수거해야 하는 집의 용량이 현재 수용 가능한 있는 용량보다 작은 경우
-                cur -= pickups[j] 
+        while(curCap > 0 && j >= 0){
+            if(pickups[j] > curCap){
+                pickups[j] -= curCap;
+                curCap = 0;
+            } else {
+                curCap -= pickups[j];
                 pickups[j] = 0;
-                
-                while ( j >= 0 && pickups[j] === 0){
-                    j-=1;
+
+                while(j >= 0 && pickups[j] === 0){
+                    j -=1;
                 }
             }
         }
@@ -55,3 +48,13 @@ function solution(cap, n, deliveries, pickups) {
     
     return answer;
 }
+
+// 만약 deliveries[i]가 curCap 보다 크면
+// -> curCap을 0으로 만들고, deliveries[i] - curCap을 한다. 
+// -> 이 경우, 더이상 전달할 수 있는 배달물이 없기에 물류창고로 돌아가야 한다.
+// -> answer += i * 2 를 한다.
+
+// 만약 deliveries[i]가 curCap 보다 작으면
+// -> curCap에서 deliveries[i]를 빼고, deliveries[i]를 0으로 만든다.
+// -> 배달 가능한 curCap이 존재하기에, 그 다음 배달 가능한 장소로 이동해
+// -> curCap이 0보다 큰 동안 위 조건문을 반복 순회한다.
