@@ -4,14 +4,14 @@ function solution(today, terms, privacies) {
     const currentTime = year * 12 * 28 + month * 28 + day;
     
     const termsHash = terms.reduce((acc,cur) => {
-        acc[cur[0]] = +cur.slice(2) * 28;
+        acc.set(cur[0], +cur.slice(2)*28);
         return acc;
-    }, {})
+    }, new Map())
     
     privacies.forEach((strDateAndTerm, idx) => {
-        let [thisDate, term] = strDateAndTerm.split(' ');
+        let [thisDate, thisTerm] = strDateAndTerm.split(' ');
         let [thisYear, thisMonth, thisDay] = thisDate.split('.').map(el => +el);
-        const privaciesTime = thisYear*12*28 + thisMonth * 28 + thisDay + termsHash[term];
+        const privaciesTime = (thisYear * 12 * 28) + (thisMonth * 28) + thisDay + termsHash.get(thisTerm);
         if(privaciesTime <= currentTime) answer.push(idx+1);
     })
     
