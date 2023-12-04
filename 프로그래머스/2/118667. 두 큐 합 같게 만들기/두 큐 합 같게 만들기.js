@@ -1,14 +1,14 @@
 function solution(queue1, queue2) {
     let q1sum = queue1.reduce((acc,cur) => acc+cur, 0);
     let q2sum = queue2.reduce((acc,cur) => acc+cur, 0);
-    
+
     if((q1sum+q2sum)%2 === 1) return -1;
-    
+
     const aimNum = (q1sum + q2sum) / 2;
     const maxLoop = queue1.length*3+1;
     let [q1,q2] = [0,0];
-    
-    
+
+
     for(let i=0; i<maxLoop; i++){
         if(q1sum === q2sum){
             return i;
@@ -24,6 +24,6 @@ function solution(queue1, queue2) {
             queue1.push(x);
         }
     }
-    
+
     return -1;
 }
