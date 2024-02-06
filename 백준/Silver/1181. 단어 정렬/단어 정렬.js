@@ -1,12 +1,41 @@
-let fs = require("fs");
-let input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
+const fs = require("fs");
 
-const N = Number(input.shift());
+const filePath =
+  process.platform === "linux" ? "./dev/stdin" : `${__dirname}/input.txt`;
 
-input.sort((a, b) => {
-  return a.length - b.length || a.localeCompare(b);
-});
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
 
-const set = new Set(input);
+console.log(solution(input));
 
-console.log(Array.from(set).join("\n"));
+/**
+ * @param {string[]} input
+ */
+function solution([count, ...inputs]) {
+  const uniqWords = [...new Set(inputs)];
+
+  return uniqWords
+    .sort((a, b) => {
+      if (a.length < b.length) return -1;
+      if (a.length === b.length) {
+        return sortWordsAlphabetically(a, b);
+      }
+      return 1;
+    })
+    .join("\n");
+}
+
+/**
+ * @param {string} a
+ * @param {string} b
+ * NOTE: a와 b의 길이는 같다.
+ */
+function sortWordsAlphabetically(a, b) {
+  const wordLength = a.length;
+
+  for (let i = 0; i < wordLength; i++) {
+    if (a[i] > b[i]) return 1;
+    if (a[i] < b[i]) return -1;
+  }
+
+  return 0;
+}
