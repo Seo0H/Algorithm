@@ -29,11 +29,9 @@ function solution(dirs) {
         if(dx !== 0) {
             nx += dx;
             location[0] = nx;
-            logs[`${nx}/${ny}`] = true;
         } else {
             ny += dy;
             location[1] = ny;
-            logs[`${nx}/${ny}`] = true;
         }
         
         return logs
