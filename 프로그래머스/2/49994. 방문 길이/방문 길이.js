@@ -1,37 +1,45 @@
-function solution(dirs) {
-   const coordinates ={
-       x: 0,
-       y:0
-   };
 
-    return dirs.split("").reduce((acc,dir) => {
-        const { x , y } = coordinates;
-        const {weights: [weightsX, weightsY], isOkayToLog} = getDirUtils(dir)
-        
-        if(isOkayToLog(x,y)){
-            acc.add(`${x + weightsX}_${y + weightsY}`);
-            coordinates.x = x + weightsX * 2;
-            coordinates.y = y + weightsY * 2;
+
+function solution(dirs) {
+    const location = [0,0];
+    let answer = 0
+    
+    const dirTemplet = {
+        'U':[0,0.5],
+        'D':[0,-0.5],
+        'L':[-0.5,0],
+        'R':[0.5,0],
         }
 
-        return acc
-    }, new Set()).size
+    const logs= dirs.split('').reduce((logs,cur) => {
+        const [dx, dy] = dirTemplet[cur];
+        const [cx, cy] = location;
+        
+        let nx = dx + cx;
+        let ny = dy + cy;
+        
+        if(ny > 5 || ny < -5 || nx > 5 || nx < -5) return logs
+        
+        if(!logs[`${nx}/${ny}`]) {
+            answer += 1
+        }
+        
+        logs[`${nx}/${ny}`] = true;
+        
+        if(dx !== 0) {
+            nx += dx;
+            location[0] = nx;
+            logs[`${nx}/${ny}`] = true;
+        } else {
+            ny += dy;
+            location[1] = ny;
+            logs[`${nx}/${ny}`] = true;
+        }
+        
+        return logs
+    },{});
+    
+    return answer
+    
 }
 
-function getDirUtils (dir) {
-    const dirTemplet = {
-        U: [0,0.5],
-        D: [0,-0.5],
-        R: [0.5,0],
-        L: [-0.5,0]
-    }
-
-    const isOkayToLog = {
-        U: (x,y) => !(y === 5),
-        D: (x,y) => !(y === -5),
-        R: (x,y) => !(x === 5),
-        L: (x,y) => !(x === -5)
-    }
-
-    return {weights : dirTemplet[dir], isOkayToLog: isOkayToLog[dir]}
-}
