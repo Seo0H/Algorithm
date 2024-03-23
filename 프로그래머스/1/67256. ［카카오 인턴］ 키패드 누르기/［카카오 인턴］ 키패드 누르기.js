@@ -1,27 +1,15 @@
 
 function solution(numbers, hand) {
-    const numPad = Array
-    .from({length: 12}, (_,idx) => ([Math.floor(idx/3), idx%3]))
-    .reduce((acc,cur,idx) => {
-        acc.set(idx, cur)
-        return acc
-    },new Map())
-    
-    const coordinate = { left: numPad.get(9), right: numPad.get(11) };
+    const numPad = makeNumPad() // 숫자 패드 1이 numPad[0][0]인 좌표를 표시하도록 변환
+    const coordinate = { left: numPad.get(9), right: numPad.get(11) }; // * : [3,0] , # : [3,2]
     const answer = numbers.reduce((logs, curNum) => {
-        
-        const isUseLeftHand = curNum === 1 |  curNum === 4 |  curNum === 7;
-        const isUseRightHand = curNum === 3 |  curNum === 6 |  curNum === 9;
-        
-        if(isUseLeftHand) {
+        if(/[147]/.test(curNum)) {
             logs += 'L'
             coordinate.left = numPad.get(curNum-1);
-        }
-        else if(isUseRightHand) {
+        } else if(/[369]/.test(curNum)) {
             logs += 'R';
             coordinate.right = numPad.get(curNum-1)
         } else {
-            // TODO: 거리 계산..
             if(curNum === 0 ) curNum = 11; // 0 보정
             
             const leftDistance = getDistance(coordinate.left , numPad.get(curNum-1));
@@ -37,13 +25,21 @@ function solution(numbers, hand) {
                 logs += hand[0].toUpperCase()
                 coordinate[hand] = numPad.get(curNum-1)
             }
-            
         }
         
         return logs
     },'');
     
     return answer;
+}
+
+function makeNumPad() {
+    return  Array
+    .from({length: 12}, (_,idx) => ([Math.floor(idx/3), idx%3]))
+    .reduce((acc,cur,idx) => {
+        acc.set(idx, cur)
+        return acc
+    },new Map())
 }
 
 function getDistance(a, b){
