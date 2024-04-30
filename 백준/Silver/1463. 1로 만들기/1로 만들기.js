@@ -11,7 +11,7 @@ console.log(solution(Number(input)));
  * @param {number} N
  */
 function solution(N) {
-  const dp = Array.from({ length: N }, () => 0);
+  const dp = Array.from({ length: N + 1 }, () => 0);
 
   for (let i = 2; i <= N; i++) {
     dp[i] = dp[i - 1] + 1;
@@ -25,5 +25,5 @@ function solution(N) {
     }
   }
 
-  return dp[N] ? dp[N] : 0;
+  return dp[N];
 }
