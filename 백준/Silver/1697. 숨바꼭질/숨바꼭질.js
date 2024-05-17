@@ -19,9 +19,11 @@ function solution([number, target]) {
   const q = [[number, 0]]; // [curNum, count]
   const visited = new Map();
   visited.set(number, true);
+  let idx = 0;
 
-  while (q.length) {
-    const [cur, curCount] = q.shift();
+  while (idx < q.length) {
+    const [cur, curCount] = q[idx];
+    idx += 1;
 
     if (cur === target) {
       return curCount;
