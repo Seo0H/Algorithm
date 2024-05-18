@@ -1,60 +1,66 @@
 function solution(users, emoticons) {
-    var answer = [];
-    // 조합 배열 만들기
-    const discountComb = getCombFromArray(emoticons, emoticons.length) // number[][]
-    const resultHash = discountComb.reduce((logs, discounts) => {
-        const discountedEmojis = emoticons.map(applyDiscount(discounts));
+    const allDiscountComb = getAllDiscountCombinations(emoticons.length);
+    const results = allDiscountComb.map(discounts => {
+        const discountedEmoticons = applyDiscounts(emoticons, discounts);
+        return calculateSales(users, discountedEmoticons, discounts);
+    });
     
-        const result = users.reduce((logs, [wantDiscount, buget]) => {
-            const userLog = discountedEmojis.reduce((logs, emojiPrice ,idx) => {
-                const discountPercent = discounts[idx];
-                
-                if(logs.emoticonPlus) return logs;
-                if(wantDiscount <= discountPercent){
-                    logs.amountPurchased += emojiPrice;
-                    buget -= emojiPrice
-                }
-                
-                if(buget <= 0){
-                    logs.emoticonPlus = true;
-                }
-                return logs
-            }, {amountPurchased: 0, emoticonPlus: false}) 
-            
-            if(userLog.emoticonPlus) {
-                logs.emoticonCount += 1;
-            } else {
-                logs.emoticonSales += userLog.amountPurchased
-            }
-            
-            return logs
-            
-        }, {emoticonCount: 0, emoticonSales: 0}) 
-
-        logs.push(result)
-        return logs
-    }, [])
-    
-    resultHash.sort((a,b) => b.emoticonCount - a.emoticonCount || b.emoticonSales - a.emoticonSales)
-
-    return [resultHash[0].emoticonCount, resultHash[0].emoticonSales];
+    results.sort((a, b) => b.emoticonCount - a.emoticonCount || b.emoticonSales - a.emoticonSales);
+    const { emoticonCount, emoticonSales } = results[0];
+    return [emoticonCount, emoticonSales];
 }
 
-function applyDiscount(discounts){
-    return (emoticon, idx) => emoticon - Math.floor(discounts[idx]*0.01*emoticon);
+function calculateSales(users, discountedEmoticons, discounts) {
+    return users.reduce((totals, [desiredDiscount, budget]) => {
+        const { amountSpent, joinedEmoticonPlus } = calculateUserPurchases(discountedEmoticons, discounts, desiredDiscount, budget);
+        
+        if (joinedEmoticonPlus) {
+            totals.emoticonCount += 1;
+        } else {
+            totals.emoticonSales += amountSpent;
+        }
+        
+        return totals;
+    }, { emoticonCount: 0, emoticonSales: 0 });
 }
 
-const discounts = [10,20,30,40]; // 10 20 30 40
-// 주어진 배열 인자로 만들 수 있는 조합을 출력하는 함수
-function getCombFromArray(arr, count, eachReault = [], finalResult=[]){
-    if(count === 0){
-        finalResult.push(eachReault)
+function calculateUserPurchases(discountedEmoticons, discounts, desiredDiscount, budget) {
+    const userLog = discountedEmoticons.reduce((log, price, idx) => {
+        if (log.joinedEmoticonPlus) return log;
+        
+        if (desiredDiscount <= discounts[idx]) {
+            log.amountSpent += price;
+            budget -= price;
+        }
+        
+        if (budget <= 0) {
+            log.joinedEmoticonPlus = true;
+        }
+        
+        return log;
+    }, { amountSpent: 0, joinedEmoticonPlus: false });
+    
+    return userLog;
+}
+
+function applyDiscounts(emoticons, discounts) {
+    return emoticons.map((emoticon, idx) => emoticon - Math.floor(discounts[idx] * 0.01 * emoticon));
+}
+
+const availableDiscounts = [10, 20, 30, 40];
+
+function getAllDiscountCombinations(length) {
+    const result = [];
+    generateCombinations(length, [], result);
+    return result;
+}
+
+function generateCombinations(count, currentCombo, result) {
+    if (count === 0) {
+        result.push(currentCombo);
         return;
     }
-
-    for(let i=0; i<4; i++){
-        getCombFromArray(arr, count-1, [...eachReault, discounts[i]], finalResult)
+    for (const discount of availableDiscounts) {
+        generateCombinations(count - 1, [...currentCombo, discount], result);
     }
-    
-    return finalResult
 }
