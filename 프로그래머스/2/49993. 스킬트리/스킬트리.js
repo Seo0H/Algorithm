@@ -1,22 +1,14 @@
 function solution(skill, skill_trees) {
-    const skillMap = skill.split('').reduce((acc,el,idx) => {
-        acc.set(el, idx)
-        return acc
-    }, new Map())
+    return skill_trees.filter(isCorrect).length
     
-    return skill_trees.reduce((count, skill) => {
-        const skillCheckMap = new Map(skillMap)
-        let lastIdx = -1;
+    function isCorrect(skillTree){
+        const skillSet = skill.split('')
         
-        for(let i = 0;i < skill.length; i++){
-            const thisSkill = skill[i]
-            if(skillCheckMap.has(thisSkill)){
-                if(skillCheckMap.get(thisSkill) === lastIdx + 1)
-                    lastIdx = skillCheckMap.get(thisSkill)
-                else return count
-            }
+        for(let i=0; i<skillTree.length; i++){
+            if(!skillSet.includes(skillTree[i])) continue
+            if(skillTree[i] === skillSet.shift()) continue
+            return false
         }
-        
-        return count + 1
-    },0);
+        return true
+    }
 }
