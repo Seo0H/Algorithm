@@ -16,7 +16,7 @@ function solution(N, orders) {
   const orderAction = OrderAction();
 
   orders.forEach(([order, number]) => {
-    orderAction[order](number);
+    orderAction[order](Number(number));
   });
 
   return orderAction.getLog().join("\n");
@@ -27,12 +27,10 @@ function OrderAction(log = []) {
 
   return {
     push(x) {
-      stack.push(Number(x));
+      stack.push(x);
     },
     pop() {
-      const result = stack.pop();
-      log.push(result ?? -1);
-      return result;
+      log.push(stack.pop() ?? -1);
     },
     top() {
       log.push(stack.at(-1) ?? -1);
