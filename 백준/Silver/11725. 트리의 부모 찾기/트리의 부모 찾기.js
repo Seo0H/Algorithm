@@ -13,39 +13,47 @@ const input = fs
 console.log(solution(input.shift()[0], input));
 
 /**
- * @param {number} N - 배열 A의 길이
- * @param {number[][]} graphArr - 수열
- * @returns {number} - 가장 큰 증가 부분 수열의 합
+ * @param {number} N
+ * @param {number[][]} graphArr
  */
 function solution(N, graphArr) {
-  const graphHash = graphArr.reduce((hash, [start, end]) => {
-    if (!hash[start]) {
-      hash[start] = [end];
-    } else hash[start].push(end);
+  const graphHash = graphArr.reduce(makeGraphHash, new Map());
 
-    if (!hash[end]) {
-      hash[end] = [start];
-    } else hash[end].push(start);
-
-    return hash;
-  }, {});
-
-  const q = [{ curIdx: 1, parentCurIdx: -1 }];
-  const result = Array.from({ length: N - 1 }, () => 0);
+  const q = [{ idx: 1, parent: -1 }];
+  const result = Array.from({ length: N - 2 }, () => 0);
 
   while (q.length) {
-    const { curIdx, parentCurIdx } = q.shift();
+    const { idx, parent } = q.shift();
 
-    const children = graphHash[curIdx].filter(
-      (child) => child !== parentCurIdx
-    );
+    const children = graphHash.get(idx).filter((child) => child !== parent);
+
     if (!children.length) continue;
 
     children.forEach((childIdx) => {
-      result[childIdx - 1] = curIdx;
-      q.push({ curIdx: childIdx, parentCurIdx: curIdx });
+      result[childIdx - 2] = idx;
+      q.push({ idx: childIdx, parent: idx });
     });
   }
 
-  return result.slice(1).join("\n");
+  return result.join("\n");
+}
+
+function makeGraphHash(hash, [start, end]) {
+  if (!hash.has(start)) {
+    hash.set(start, [end]);
+  } else {
+    const addedArray = hash.get(start);
+    addedArray.push(end);
+    hash.set(start, addedArray);
+  }
+
+  if (!hash.has(end)) {
+    hash.set(end, [start]);
+  } else {
+    const addedArray = hash.get(end);
+    addedArray.push(start);
+    hash.set(end, addedArray);
+  }
+
+  return hash;
 }
