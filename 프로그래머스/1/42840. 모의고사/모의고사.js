@@ -6,34 +6,19 @@ const patterns = {
 };
 
 function solution(answers) {
-  const sortedDESCResults = getScoreDESCResult(getResultMap(answers));
-  const [no] = sortedDESCResults.at(0);
-  const results = [no];
-
-  for (let i = 1; i < sortedDESCResults.length; i++) {
-    const [_, biggerScore] = sortedDESCResults[i - 1];
-    const [curNo, curScore] = sortedDESCResults[i];
-
-    if (biggerScore === curScore) {
-      results.push(curNo);
-    } else break;
-  }
-
-  return results.map(Number);
+  const results = getResults(answers);
+  const max = Math.max(...results);
+  return results.reduce((acc,cur,no) => {
+      if(cur === max) acc.push(no);
+      return acc
+  }, []).sort()
 }
 
 /**
- * @param {Object.<string, number>} resultMap key는 수포자 번호, value는 수포자 score
- * @description score 기준 내림차순 정렬된 배열
- */
-const getScoreDESCResult = (resultMap) =>
-  Object.entries(resultMap).sort(([, aScore], [, bScore]) => bScore - aScore);
-
-/**
  * @param {number[]} answers
- * @returns {Object.<string, number>} resultMap. key는 수포자 번호, value는 수포자 score
+ * @returns {[null, number, number, number]} results 수포자 번호가 index이고 각 요소의 값은 점수
  */
-const getResultMap = (answers) => {
+const getResults = (answers) => {
   const noIdxMap = { 1: 0, 2: 0, 3: 0 };
 
   return answers.reduce(
@@ -58,10 +43,6 @@ const getResultMap = (answers) => {
 
       return memo;
     },
-    {
-      1: 0,
-      2: 0,
-      3: 0,
-    }
+    [null, 0, 0, 0]
   );
 };
