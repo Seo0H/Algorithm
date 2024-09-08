@@ -1,39 +1,42 @@
 function solution(n, wires) {
     let answer = Number.MAX_SAFE_INTEGER;
-    
-    const tree = Array.from(Array(n+1), () => []);
+    const answers = []
+    const trees = Array.from({length:n+1}, () => []);
     
     wires.forEach(([v1, v2]) => {
-        tree[v1].push(v2);
-        tree[v2].push(v1);
+        trees[v1].push(v2);
+        trees[v2].push(v1);
     })
     
-    wires.forEach(([v1,v2])=>{
-        answer = Math.min(answer, Math.abs(countTree(v1,v2) - countTree(v2,v1)));
+    const getLinkedTreeCount = getLinkedTreeCountMaker(trees, n);
+    
+    wires.forEach(([v1, v2]) => {
+        answer = Math.min(answer, Math.abs(getLinkedTreeCount(v1, v2) - getLinkedTreeCount(v2, v1)))
     })
     
-    return answer
+    return answer;
+};
+
+function getLinkedTreeCountMaker(trees, n) {
     
-    function countTree(root, cutNum){
-        let cnt = 0;
+    return (root, cutNode) => {
         const q = [root];
-        const visited = [];
-        
+        let count = 1;
+        const visited = Array.from({length:n+1}, () => false); // idx 0은 방문할 일이 없음. 보정을 위해 +1
         visited[root] = true;
         
         while(q.length){
-            let index = q.pop();
+            const node = q.shift();
+
+            trees[node].forEach((linkedNode) => {
+                if(linkedNode === cutNode || visited[linkedNode]) return;
+                count += 1;
+                visited[linkedNode] = true;
+                q.push(linkedNode);
+            })
             
-            tree[index].forEach(el => {
-                if(el !== cutNum && visited[el] !== true) {
-                    visited[el] = true;
-                    q.push(el);
-                }
-            });
-            cnt++;
         }
         
-        return cnt;
-        
+        return count
     }
 }
