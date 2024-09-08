@@ -1,6 +1,4 @@
 function solution(n, wires) {
-    let answer = Number.MAX_SAFE_INTEGER;
-    const answers = []
     const trees = Array.from({length:n+1}, () => []);
     
     wires.forEach(([v1, v2]) => {
@@ -10,11 +8,11 @@ function solution(n, wires) {
     
     const getLinkedTreeCount = getLinkedTreeCountMaker(trees, n);
     
-    wires.forEach(([v1, v2]) => {
-        answer = Math.min(answer, Math.abs(getLinkedTreeCount(v1, v2) - getLinkedTreeCount(v2, v1)))
-    })
+    return wires
+        .reduce((answer, [v1, v2]) => 
+                        Math.min(answer, Math.abs(getLinkedTreeCount(v1, v2) - getLinkedTreeCount(v2, v1))),
+                        Number.MAX_SAFE_INTEGER)
     
-    return answer;
 };
 
 function getLinkedTreeCountMaker(trees, n) {
