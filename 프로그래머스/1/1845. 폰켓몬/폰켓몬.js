@@ -1,8 +1,15 @@
 function solution(nums) {
-    const countPocketmon = new Set(nums).size;
-    return nums.length/2 < countPocketmon ? Math.floor(nums.length/2) : countPocketmon;
+    const n = nums.length / 2;
+    const ponketmonMap = nums.reduce((acc,cur) => {
+        if(acc[cur]){
+            acc[cur] += 1;
+        } else{
+            acc[cur] = 1;
+        }
+        return acc
+    }, {})
+    
+    const ponketmonTypesCount = Object.keys(ponketmonMap).length
+    
+    return n > ponketmonTypesCount ? ponketmonTypesCount : n;
 }
-
-// hash
-// 1. 각 요소가 몇번 반복되는지 체크한 obj 만들기
-// 2. 해당 obj key 개수와 nums.length/2 비교. obj key 개수는 nums.length/2 보다 클 수 없음.
