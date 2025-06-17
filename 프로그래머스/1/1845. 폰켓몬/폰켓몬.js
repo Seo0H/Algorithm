@@ -1,6 +1,6 @@
 function solution(nums) {
-    const n = nums.length / 2;
-    const uniqPonketmons = [...new Set(nums)]
+    const uniqNumsCount = [...new Set(nums)].length;
+    const targetCount = nums.length / 2;
     
-    return n > uniqPonketmons.length ? uniqPonketmons.length : n;
+    return uniqNumsCount < targetCount ? uniqNumsCount : targetCount
 }
