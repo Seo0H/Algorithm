@@ -1,18 +1,13 @@
 function solution(s){
     if(s.at(0) === ')' || s.at(-1) === '(') return false;
     
-    const q = [];
+    let count = 0;
     
     for(let i = 0 ; i < s.length ; i++) {
-        const target = s[i];
+        count += s[i] === '(' ? 1 : -1 ;
         
-        if(target === '(') {
-            q.push(target);
-            continue
-        }
-        
-        q.pop();
+        if(count < 0) return false
     }
     
-    return !q.length
+    return count === 0
 }
