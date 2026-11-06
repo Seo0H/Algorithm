@@ -1,18 +1,17 @@
 function solution(participant, completion) {
-    const participantMap = participant.reduce((acc,cur) => {
-         if(!acc[cur]) {
-             acc[cur] = 0;
-         }
-
-        acc[cur] += 1;
-
+    const completionMap = completion.reduce((acc,name) => {
+        acc[name] = (acc[name] || 0) + 1;
         return acc
     }, {})
     
-    completion.forEach((cur) => { participantMap[cur] -= 1 });
-    
-    const result = Object.keys(participantMap).find(key => participantMap[key] >= 1);
-    
-    return result
+    for ( const name of participant) {
+         if (!completionMap[name]) {
+             return name;
+        }
+        
+        completionMap[name]--;
+    }
+        
+    return 'not found'
         
 }
