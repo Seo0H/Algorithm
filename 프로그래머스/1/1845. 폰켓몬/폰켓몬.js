@@ -1,6 +1,4 @@
 function solution(nums) {
-    const uniqNumsCount = [...new Set(nums)].length;
-    const targetCount = nums.length / 2;
-    
-    return uniqNumsCount < targetCount ? uniqNumsCount : targetCount
+    const numsSet = new Set(nums)
+    return numsSet.size > nums.length / 2 ? nums.length / 2 : numsSet.size
 }
