@@ -1,16 +1,18 @@
 function solution(participant, completion) {
-    const completionMap = completion.reduce((nameMap,cur) => {
-        nameMap.set(cur, nameMap.has(cur) ? nameMap.get(cur) + 1 : 1 )
-        return nameMap
-    }, new Map());
+    const participantMap = participant.reduce((acc,cur) => {
+         if(!acc[cur]) {
+             acc[cur] = 0;
+         }
 
-    for(const participantName of participant){
-        if(completionMap.has(participantName) === false) {
-            return participantName
-        }
-        
-        completionMap.set(participantName, completionMap.get(participantName) - 1)
-    }
+        acc[cur] += 1;
+
+        return acc
+    }, {})
     
-    return [...completionMap].filter(([name, count]) => count < 0).at(0).at(0)
+    completion.forEach((cur) => { participantMap[cur] -= 1 });
+    
+    const result = Object.keys(participantMap).find(key => participantMap[key] >= 1);
+    
+    return result
+        
 }
