@@ -1,21 +1,9 @@
 function solution(s){
-    const memo = [];
+    let count = 0;
     
-    for (const char of s ) {
-        if ("(" === char) {
-            memo.push(char);
-            continue
-        }
-     
-        if (")" === char && memo.at(-1) === "(") {
-            memo.pop()
-            continue
-        }
-        
-        if(")" === char){
-            memo.push(char);
-        }
+    for(const char of s) {
+        count += char === '(' ? 1 : -1;
+        if(count < 0) return false
     }
-    
-    return !memo.length
+    return !count
 }
