@@ -1,13 +1,21 @@
 function solution(s){
-    if(s.at(0) === ')' || s.at(-1) === '(') return false;
+    const memo = [];
     
-    let count = 0;
-    
-    for(let i = 0 ; i < s.length ; i++) {
-        count += s[i] === '(' ? 1 : -1 ;
+    for (const char of s ) {
+        if ("(" === char) {
+            memo.push(char);
+            continue
+        }
+     
+        if (")" === char && memo.at(-1) === "(") {
+            memo.pop()
+            continue
+        }
         
-        if(count < 0) return false
+        if(")" === char){
+            memo.push(char);
+        }
     }
     
-    return count === 0
+    return !memo.length
 }
