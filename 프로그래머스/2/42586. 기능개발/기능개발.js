@@ -1,25 +1,27 @@
 function solution(progresses, speeds) {
     const answer = [];
+    let idx = 0;
+    let day = 1;
     
-    while(progresses.length){
-        // 개발 속도 별로 작업 진행
-        for(let i=0; i<progresses.length; i++){
-            progresses[i] += speeds[i];
+    while(idx < progresses.length){
+        let batchDeployCount = 0;
+        progresses[idx] += speeds[idx] * day;
+        
+        if(progresses[idx] < 100) {
+            day += Math.ceil((100 - progresses[idx]) / speeds[idx])
         }
         
-        // 선 배포 작업 순서대로 완료된 작업 배포
-        let deployedWorkCount = 0;
-        while(progresses[0] >= 100){
-            progresses.shift();
-            speeds.shift();
-            deployedWorkCount +=1;
+        batchDeployCount += 1;
+        
+        idx += 1;
+        
+        while(progresses[idx] + day * speeds[idx] >= 100) {
+            batchDeployCount += 1;
+            idx += 1;
         }
         
-        // 만약 배포된 작업이 있다면 답변에 추가
-        if(deployedWorkCount) {
-            answer.push(deployedWorkCount)
-        }
+        answer.push(batchDeployCount);
     }
     
-    return answer;
+    return answer
 }
