@@ -2,13 +2,17 @@ function solution(priorities, location) {
     let pointer = 0;
     let count = 0;
     
+    let maxPriority = Math.max(...priorities);
+    
     while (priorities[location] > -1) {
-        if(priorities[pointer] === -1) {
+        const curPriority = priorities[pointer];
+        
+        if(curPriority === -1) {
             next();
             continue
         }
         
-        const hasHigher = priorities.some(p => p > priorities[pointer]);
+        const hasHigher = curPriority < maxPriority;
         
         if(hasHigher) {
             next();
@@ -24,6 +28,7 @@ function solution(priorities, location) {
         }
         
         priorities[pointer] = -1; // 처리 완료
+        maxPriority = Math.max(...priorities);
         next();
     }
     
