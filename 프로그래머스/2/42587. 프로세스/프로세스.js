@@ -1,41 +1,33 @@
 function solution(priorities, location) {
-    let pointer = 0;
+    const queue = priorities.map((priority, idx) => ({priority, idx}));
+    const counts = Array.from({length: 10}, () => 0);
+    priorities.forEach(p => counts[p]++);
+    
+    let currentMax = 9;
+    while (counts[currentMax] === 0) currentMax--;
+    
     let count = 0;
     
-    let maxPriority = Math.max(...priorities);
-    
-    while (priorities[location] > -1) {
-        const curPriority = priorities[pointer];
+    while(queue.length > 0) {
+        const cur = queue.shift();
         
-        if(curPriority === -1) {
-            next();
+        // has higher
+        if(cur.priority < currentMax) {
+            queue.push(cur)
             continue
         }
         
-        const hasHigher = curPriority < maxPriority;
+        // cur process is highest..
+        count++;
+        counts[cur.priority]--;
         
-        if(hasHigher) {
-            next();
-            continue
+        while( counts[currentMax] === 0 && currentMax > 0 ){
+            currentMax--;
         }
         
-        // highest priority process is cur process..
-        
-        count += 1;
-        
-        if(pointer === location) {
+        if(cur.idx === location) {
             return count
         }
-        
-        priorities[pointer] = -1; // 처리 완료
-        maxPriority = Math.max(...priorities);
-        next();
-    }
-    
-    return 'something wrong...'
-    
-    function next() {
-        pointer = ++pointer % priorities.length;
     }
 }
 
